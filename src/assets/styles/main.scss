@@ -1,3 +1,7 @@
-.data {
-    background: white;
+@import "./fonts.scss";
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  width: 100%;
 }

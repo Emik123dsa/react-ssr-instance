@@ -1,19 +1,12 @@
-import Main from "../views/Main.jsx";
-import World from "../views/World.jsx";
+import Default from "../views/Default.jsx";
 import NotFound from "../views/errors/404.jsx";
 
 export const StaticRoutesConfig = [
   {
-    key: "main",
-    component: Main,
+    key: "default",
+    component: Default,
     exact: true,
-    path: "/main",
-  },
-  {
-    key: "world",
-    component: World,
-    exact: true,
-    path: "/world",
+    path: "/",
   },
   {
     key: "not-found",

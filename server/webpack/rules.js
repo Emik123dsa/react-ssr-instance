@@ -16,7 +16,7 @@ const rules = [
     ],
   },
   {
-    test: /\.(sa|sc)ss$/,
+    test: /\.(sa|sc|c)ss$/,
     exclude: /node_modules/,
     use: [
       {

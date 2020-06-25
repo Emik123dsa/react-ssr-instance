@@ -8,11 +8,8 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const autoprefixer = require("autoprefixer");
 
-const alias = require("./../../helpers/alias");
-
 const plugins = [
   new ProgressBarPlugin(),
-
   new CopyWebpackPlugin({
     patterns: [
       { from: "src/assets/img", to: "img" },
@@ -28,7 +25,6 @@ const plugins = [
     },
   }),
   new webpack.NamedModulesPlugin(),
-  
 ];
 
 module.exports = (options) => ({
@@ -68,7 +64,7 @@ module.exports = (options) => ({
           {
             loader: "css-loader",
             options: {
-              sourceMap: true
+              sourceMap: true,
               // importLoaders: 1,
               // modules: true,
               // localIdentName:
@@ -80,7 +76,7 @@ module.exports = (options) => ({
           {
             loader: "postcss-loader",
             options: {
-              plugins: [autoprefixer()],
+              plugins: [autoprefixer],
               sourceMap: true,
             },
           },
@@ -91,7 +87,7 @@ module.exports = (options) => ({
         ],
       },
       {
-        test: /\.(eot|svg|otf|ttf|woff|woff2)$/,
+        test: /\.(eot|svg|otf|ttf|woff|woff2|png)$/,
         use: "file-loader",
       },
       {
@@ -107,6 +103,9 @@ module.exports = (options) => ({
   },
   plugins: options.plugins.concat(plugins),
   resolve: {
+    alias: {
+      '@': path.resolve("src")
+    },
     modules: ["node_modules"],
     extensions: [".js", ".jsx", ".react.js"],
     mainFields: ["browser", "main", "jsnext:main"],
@@ -114,11 +113,11 @@ module.exports = (options) => ({
   devtool: options.devtool,
   target: "web",
   performance: options.performance || {},
-  node: {
-    child_process: "empty",
-    fs: "empty",
-    module: "empty",
-    net: "empty",
-    tls: "empty",
-  },
+  // node: {
+  //   child_process: "empty",
+  //   fs: "empty",
+  //   module: "empty",
+  //   net: "empty",
+  //   tls: "empty",
+  // },
 });

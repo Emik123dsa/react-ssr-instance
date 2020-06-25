@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
 
+
 const plugins = [
   new webpack.NoEmitOnErrorsPlugin(),
   //new webpack.HotModuleReplacementPlugin(),
@@ -27,7 +28,10 @@ const plugins = [
 module.exports = require("./webpack.base.babel")({
   mode: "development",
   entry: {
-    main: ["babel-polyfill", "./client/index.js"],
+    main: [
+      "babel-polyfill",
+      "./client/index.js",
+    ],
   },
   output: {
     filename: "[name].dev.js",

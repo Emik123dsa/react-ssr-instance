@@ -19,9 +19,7 @@ class NotFound extends React.Component {
 
     render() {
         return (
-            <div> 
-                <Link to="/world">Return to the back</Link>
-                415 | Page not found</div>
+            <div> 400 | Page not found </div>
         )
     }
 }
