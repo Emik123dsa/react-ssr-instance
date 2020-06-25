@@ -35,13 +35,10 @@ export const clientHydrate = () => {
   dynamicRoutes[0].routes = [...dynamicRoutes[0].routes, ...StaticRoutesConfig];
 
   hydrate(
-    <StyleContext.Provider values={{ insertCss }}>
+    <StyleContext.Provider value={{ insertCss }}>
       <Provider key="provider" store={store}>
         <ConnectedRouter history={history}>
-          <ReduxAsyncConnect
-            helpers={{}}
-            routes={dynamicRoutes}
-          ></ReduxAsyncConnect>
+          <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
         </ConnectedRouter>
       </Provider>
     </StyleContext.Provider>,

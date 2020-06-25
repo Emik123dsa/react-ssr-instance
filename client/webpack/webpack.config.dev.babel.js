@@ -2,25 +2,33 @@ const path = require("path");
 const webpack = require("webpack");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
 
 const plugins = [
   new webpack.NoEmitOnErrorsPlugin(),
+  //new webpack.HotModuleReplacementPlugin(),
+  new webpack.optimize.OccurrenceOrderPlugin(),
+  new webpack.SourceMapDevToolPlugin({
+    filename: "[name].js.map",
+    exclude: ["bundle.js"],
+  }),
   new HtmlWebpackPlugin({
-    inject: true,
     template: "static/index.html",
     filename: "main.html",
   }),
+  //new CleanWebpackPlugin(),
   new CircularDependencyPlugin({
-    exclude: /a\.js|node_modules/,
+    exclude: /node_modules/,
     failOnError: false,
   }),
 ];
 
 module.exports = require("./webpack.base.babel")({
-  entry: ["eventsource-polyfill", path.join(process.cwd(), "client/index.js")],
-
+  mode: "development",
+  entry: {
+    main: ["babel-polyfill", "./client/index.js"],
+  },
   output: {
     filename: "[name].dev.js",
     chunkFilename: "[name].dev.js",

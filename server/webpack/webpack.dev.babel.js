@@ -9,8 +9,9 @@ const alias = require("../../helpers/alias");
 const rules = require("./rules");
 
 const nodeConf = {
+  mode: "development",
   target: "node",
-  entry: ["babel-polyfill", "./server/index.js"],
+  entry: { main: ["babel-polyfill", "./server/index.js"] },
   externals: [nodeExternals(), "react-helmet"],
   output: {
     path: path.resolve("build"),
@@ -33,13 +34,11 @@ const nodeConf = {
       window: path.resolve(path.join(__dirname, "../../helpers/window.mock")),
       document: "global/document",
     }),
+    // new webpack.optimize.OccurrenceOrderPlugin(),
+    // new webpack.NoEmitOnErrorsPlugin(),
   ],
   resolve: {
-    alias,
-    modules: [
-      path.resolve("./src"),
-      path.resolve(process.cwd(), "node_modules"),
-    ],
+    modules: ["node_modules", "src"],
     extensions: [".js", ".jsx", ".react.js"],
     mainFields: ["browser", "jsnext:main", "main"],
   },

@@ -1,11 +1,10 @@
 import { GLOBAL_REDUCER } from "../vendor/globalFilter";
-import { create } from "core-js/fn/object";
 
 const REQUEST = "REQUEST";
 const SUCCESS = "SUCCESS";
 const FAILURE = "FAILURE";
 
-function createRequestTypes(base) {
+function createRequest(base) {
   return [REQUEST, SUCCESS, FAILURE].reduce((acc, type) => {
     acc[type] = `${base}_${type}`;
 
@@ -26,10 +25,11 @@ export const appSettings = {
 };
 
 
-export const SET_APP_SETTINGS = createRequestTypes(
+export const SET_APP_SETTINGS = createRequest(
   GLOBAL_REDUCER.SET_APP_SETTINGS
 );
-export const SET_MENU = createRquest(GLOBAL_REDUCER.SET_MENU);
+
+export const SET_MENU = createRequest(GLOBAL_REDUCER.SET_MENU);
 export const SET_CATEGORIES = createRequest(GLOBAL_REDUCER.SET_CATEGORIES);
 export const SET_ITEMS = createRequest(GLOBAL_REDUCER.SET_ITEMS);
 export const SET_ITEMS_DETAILS = createRequest(GLOBAL_REDUCER.SET_ITEM_DETAILS);

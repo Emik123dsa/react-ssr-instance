@@ -8,6 +8,7 @@ import { setAppSettings } from "./actions/globalActions";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import { asyncConnect } from 'redux-connect';
+import { Link } from "react-router-dom";
 
 @connect(state => ({
     location: getRouterLocation(state)
@@ -17,6 +18,7 @@ export default class App extends Component {
 
     static propTypes = {
         location: PropTypes.shape().isRequired,
+        route: PropTypes.shape().isRequired,
     }
 
     renderSiteMeta() {
@@ -37,6 +39,7 @@ export default class App extends Component {
         const { route } = this.props;
         return (
             <div>
+                
                 {this.renderSiteMeta()}
                 {renderRoutes(route.routes)}
             </div>

@@ -12,6 +12,7 @@ const alias = require("./../../helpers/alias");
 
 const plugins = [
   new ProgressBarPlugin(),
+
   new CopyWebpackPlugin({
     patterns: [
       { from: "src/assets/img", to: "img" },
@@ -27,9 +28,11 @@ const plugins = [
     },
   }),
   new webpack.NamedModulesPlugin(),
+  
 ];
 
 module.exports = (options) => ({
+  mode: options.mode,
   entry: options.entry,
   output: Object.assign(
     {
@@ -41,27 +44,37 @@ module.exports = (options) => ({
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        exclude: /(node_modules|app[/\\]+libs.*)/,
-        use: {
-          loader: "babel-loader",
-          options: options.babelQuery,
-        },
+        test: /\.(jsx?)$/,
+        exclude: /node_modules/,
+
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env", "@babel/react"],
+              cacheDirectory: true,
+              plugins: ["react-hot-loader/babel"],
+            },
+          },
+        ],
       },
       {
-        test: /\.less$/,
+        test: /\.(sc|sa|c)ss$/,
         exclude: /node_modules/,
         use: [
-          "isomorphic-style-loader",
           {
-            loader: "css-loader?modules=false",
+            loader: "isomorphic-style-loader",
+          },
+          {
+            loader: "css-loader",
             options: {
-              importLoaders: 1,
-              modules: true,
-              localIdentName:
-                process.env.NODE_ENV !== "production"
-                  ? "[name]-[local]-[hash:base64:5]"
-                  : "[hash:base64:5]",
+              sourceMap: true
+              // importLoaders: 1,
+              // modules: true,
+              // localIdentName:
+              //   process.env.NODE_ENV !== "production"
+              //     ? "[name]-[local]-[hash:base64:5]"
+              //     : "[hash:base64:5]",
             },
           },
           {
@@ -71,13 +84,11 @@ module.exports = (options) => ({
               sourceMap: true,
             },
           },
-          "less-loader",
+          {
+            loader: "sass-loader",
+            options: { sourceMap: true },
+          },
         ],
-      },
-      {
-        test: /\.css$/,
-        include: /(node_modules|app)/,
-        use: ["isomorphic-style-loader", "css-loader?modules=false"],
       },
       {
         test: /\.(eot|svg|otf|ttf|woff|woff2)$/,
@@ -96,11 +107,7 @@ module.exports = (options) => ({
   },
   plugins: options.plugins.concat(plugins),
   resolve: {
-    alias,
-    modules: [
-      path.resolve("./src"),
-      path.resolve(process.cwd(), "node_modules"),
-    ],
+    modules: ["node_modules"],
     extensions: [".js", ".jsx", ".react.js"],
     mainFields: ["browser", "main", "jsnext:main"],
   },

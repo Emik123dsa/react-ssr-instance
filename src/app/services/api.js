@@ -28,6 +28,8 @@ function callApi(endpoint, schema) {
       }
 
       const camelizedJson = camelizeKeys(json);
+      
+      console.log(Object.assign({}, normalize(camelizedJson, schema))); 
 
       return Object.assign({}, normalize(camelizedJson, schema));
     })

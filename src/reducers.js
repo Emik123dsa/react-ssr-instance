@@ -10,12 +10,11 @@ import {
   setToImmutableStateFunc,
 } from "redux-connect";
 
-setToImmutableStateFunc((mutableState) => fromJS(mutableState));
-setToMutableStateFunc((immutableState) => immutableState.toJS());
+setToImmutableStateFunc(mutableState => fromJS(mutableState));
+setToMutableStateFunc(immutableState => immutableState.toJS());
 
-export default (history) =>
-  combineReducers({
-    reduxAsyncConnect,
-    router: connectRouter(history),
-    globalReducer,
-  });
+export default history => combineReducers({
+  reduxAsyncConnect,
+  router: connectRouter(history),
+  globalReducer,
+});

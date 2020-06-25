@@ -2,26 +2,36 @@ const autoprefixer = require("autoprefixer");
 
 const rules = [
   {
-    test: /\.js|jsx?$/,
-    exclude: /(node_modules|app[/\\]+libs.*)/,
-    use: {
-      loader: "babel-loader",
-    },
-  },
-  {
-    test: /\.less$/,
+    test: /\.(jsx?)$/,
     exclude: /node_modules/,
     use: [
-      "isomorphic-style-loader",
       {
-        loader: "css-loader?modules=false",
+        loader: "babel-loader",
         options: {
-          importLoaders: 1,
-          modules: true,
-          localIdentName:
-            process.env.NODE_ENV !== "production"
-              ? "[name]-[local]-[hash:base64:5]"
-              : "[hash:base64:5]",
+          presets: ["@babel/preset-env", "@babel/react"],
+          cacheDirectory: true,
+          plugins: ["react-hot-loader/babel"],
+        },
+      },
+    ],
+  },
+  {
+    test: /\.(sa|sc)ss$/,
+    exclude: /node_modules/,
+    use: [
+      {
+        loader: "isomorphic-style-loader",
+      },
+      {
+        loader: "css-loader",
+        options: {
+          sourceMap: true
+          // importLoaders: 1,
+          // modules: true,
+          // localIdentName:
+          //   process.env.NODE_ENV !== "production"
+          //     ? "[name]-[local]-[hash:base64:5]"
+          //     : "[hash:base64:5]",
         },
       },
       {
@@ -31,13 +41,11 @@ const rules = [
           sourceMap: true,
         },
       },
-      "less-loader",
+      {
+        loader: "sass-loader",
+        options: { sourceMap: true },
+      },
     ],
-  },
-  {
-    test: /\.css$/,
-    include: /(node_modules|app)/,
-    use: ["isomorphic-style-loader", "css-loader?modules=false"],
   },
   {
     test: /\.(gif)$/,

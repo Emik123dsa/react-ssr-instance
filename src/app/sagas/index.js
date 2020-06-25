@@ -36,11 +36,15 @@ async function getAppSettings() {
  */
 function* appSettings() {
   try {
-    const payload = yield call(setAppSettings);
-    yield put({ type: GLOBAL_REDUCER.SET_APP_SETTINGS, payload });
+    //const payload = yield call(setAppSettings);
+    //yield put({ type: GLOBAL_REDUCER.SET_APP_SETTINGS, payload });
   } catch (e) {
     console.error(e);
   }
+}
+
+function* watch() {
+  yield fork(appSettings);
 }
 
 /**
@@ -48,5 +52,5 @@ function* appSettings() {
  */
 export function* root() {
   getAppSettings();
-  yield all([fork(appSettings)]);
+  yield all([fork(watch)]);
 }

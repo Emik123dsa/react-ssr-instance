@@ -23,9 +23,10 @@ import { StaticRoutesConfig } from "../src/app/routes/staticRoutes";
 import sagas from "../src/sagas";
 
 const PORT = process.env.NODE_PORT || 3000;
+
 const app = express();
 
-app.use(express.static(path.join(__dirname, "../build")));
+app.use("/", express.static(path.resolve("build")));
 
 const initialState = {};
 
@@ -69,10 +70,7 @@ app.get("*", (req, res) => {
           <StyleContext.Provider value={{ insertCss }}>
             <Provider store={store} key="provider">
               <StaticRouter location={location} context={context}>
-                <ReduxAsyncConnect
-                  routes={dynamicRoutes}
-                  helpers={helpers}
-                ></ReduxAsyncConnect>
+                <ReduxAsyncConnect helpers={helpers} routes={dynamicRoutes} />
               </StaticRouter>
             </Provider>
           </StyleContext.Provider>
