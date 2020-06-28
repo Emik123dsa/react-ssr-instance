@@ -1,9 +1,17 @@
-import { takeEvery, put, call, all, fork } from "redux-saga/effects";
-import { apiRequest } from "./axios";
-import { api, history } from "../services";
+import { put, call, all, fork, take, takeEvery, select } from "redux-saga/effects";
 
-import { GLOBAL_REDUCER } from "../actions/vendor/globalFilter";
+import api from "../services";
 
+import * as actions from "../actions/converterActions";
+import * as selectors from "../selectors/converterSelectors";
+
+/**
+ * FETCH FUNCTION FOR DETERMINING GLOBAL REDUX STORE
+ * @param {*} entity  
+ * @param {*} apiFn 
+ * @param {*} id 
+ * @param {*} url  
+ */
 function* fetchEntity(entity, apiFn, id, url) {
   yield put(entity.request(id));
 
@@ -15,42 +23,48 @@ function* fetchEntity(entity, apiFn, id, url) {
     yield put(entity.failure(id, error));
   }
 }
-/**
- * Asynchronus function for data fetching
- */
-async function setAppSettings() {
-  const response = await apiRequest({
-    url: "getAppSettings",
-  });
-  return response;
-}
 
-async function getAppSettings() {
-  const resp = await api.fetchAppSettings("getAppSettings");
+/*********************************
+ *BINDING FUNCTION FROM PATTERNS *
+ *********************************/
 
-  //console.log(resp.response);
-  return resp;
-}
+export const fetchStoreFromMongo = fetchEntity.bind(null, actions.MONGO_DATABASE_STORE, api.fetchMongoDB);
+
 /**
- * Functions generators for filling store of the data
+ * IMPORT CURRENCY TO FETCH DATA FROM REST API
+ * @param {*} currency 
+ * @param {*} requiredFields 
  */
-function* appSettings() {
+function* importMongoStore(store, requiredFields) {
   try {
-    //const payload = yield call(setAppSettings);
-    //yield put({ type: GLOBAL_REDUCER.SET_APP_SETTINGS, payload });
+    const payload = yield select(selectors.getMongoDB, store);
+
+    if (!payload || requiredFields.some(key => !payload.hasOwnProperty(key))) {
+      yield call(fetchStoreFromMongo, store);
+    }
   } catch (e) {
     console.error(e);
   }
 }
 
-function* watch() {
-  yield fork(appSettings);
+/*****************************
+ * WATCHERS SAGA FROM PATTERNS
+ *****************************/
+function* watchImportMongoStore() {
+  while (true) {
+    const { store } = yield take(actions.FETCH_MONGO_DATABASE);
+
+    yield fork(importMongoStore, store);
+  }
 }
 
-/**
- * Essenetial saga
- */
-export function* root() {
-  getAppSettings();
-  yield all([fork(watch)]);
+/********************************************
+ * ROOT INVOKER TO FORK ALL THE SAGA ACTIONS*
+ ********************************************/
+function* root() {
+  yield all([
+    fork(watchImportMongoStore),
+  ]);
 }
+
+export default root;

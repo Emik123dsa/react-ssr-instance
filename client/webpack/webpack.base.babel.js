@@ -24,6 +24,7 @@ const plugins = [
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     },
   }),
+  
   new webpack.NamedModulesPlugin(),
 ];
 
@@ -55,22 +56,18 @@ module.exports = (options) => ({
         ],
       },
       {
-        test: /\.(sc|sa|c)ss$/,
-        exclude: /node_modules/,
+        test: /\.scss$/,
+
         use: [
+          "isomorphic-style-loader",
+        
           {
-            loader: "isomorphic-style-loader",
-          },
-          {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
-              sourceMap: true,
-              // importLoaders: 1,
-              // modules: true,
-              // localIdentName:
-              //   process.env.NODE_ENV !== "production"
-              //     ? "[name]-[local]-[hash:base64:5]"
-              //     : "[hash:base64:5]",
+              importLoaders: 1,
+              modules: {
+                localIdentName: process.env.NODE_ENV !== 'production' ? '[name]-[local]-[hash:base64:5]' : '[hash:base64:5]',
+              }
             },
           },
           {
@@ -87,11 +84,58 @@ module.exports = (options) => ({
         ],
       },
       {
+        test: /\.sass$/,
+        use: [
+          "isomorphic-style-loader",
+         
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: {
+                localIdentName: process.env.NODE_ENV !== 'production' ? '[name]-[local]-[hash:base64:5]' : '[hash:base64:5]',
+              }
+            },
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: [autoprefixer],
+              sourceMap: true,
+            },
+          },
+          {
+            loader: "sass-loader",
+            options: { sourceMap: true },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'isomorphic-style-loader',
+        
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: [autoprefixer],
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      {
         test: /\.(eot|svg|otf|ttf|woff|woff2|png)$/,
         use: "file-loader",
       },
       {
-        test: /\.(mp4|webm|png|gif)$/,
+        test: /\.(mp4|webm|gif)$/,
         use: {
           loader: "url-loader",
           options: {
@@ -104,7 +148,8 @@ module.exports = (options) => ({
   plugins: options.plugins.concat(plugins),
   resolve: {
     alias: {
-      '@': path.resolve("src")
+      '@': path.resolve("src"),
+      's': path.resolve("src/assets/styles")
     },
     modules: ["node_modules"],
     extensions: [".js", ".jsx", ".react.js"],
@@ -113,11 +158,11 @@ module.exports = (options) => ({
   devtool: options.devtool,
   target: "web",
   performance: options.performance || {},
-  // node: {
-  //   child_process: "empty",
-  //   fs: "empty",
-  //   module: "empty",
-  //   net: "empty",
-  //   tls: "empty",
-  // },
+  node: {
+    child_process: "empty",
+    fs: "empty",
+    module: "empty",
+    net: "empty",
+    tls: "empty",
+  },
 });

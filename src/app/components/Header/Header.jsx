@@ -1,32 +1,50 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Logo from "@/assets/img/pickar_logo_white.png";
 
+import withStyles from "isomorphic-style-loader/withStyles";
 
-export default class Header extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+import s from "./Header.scss";
+import m from "@/assets/styles/main.scss";
 
-    static propTypes = {}
+const pickarStyle = {
+  background: "url(" + Logo + ")",
+  position: "relative",
+  display: "block",
+  width: "100%",
+  height: "35px",
+  backgroundRepeat: "no-repeat",
+};
 
-    render() {
-        return (
-            <header className="vendor__concurrently">
-                <div className="container">
-                    <div className="vendor__header">
-                        <div className="vendor__header-title">
-                            <h2 className="vendor__header-label">
-                                <img src={require('@/assets/img/pickar_logo_white.png')} alt="pickar"/>
-                            </h2>
-                        </div>
-                        <div className="vendor__header-body">
-                            <span className="vendor__header-body__label">
-                                Convert currencies in real-time
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </header>
-        )
-    }
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  static propTypes = {};
+
+  render() {
+    return (
+      <header className={s.vendor__concurrently}>
+        <div className={m.container}>
+          <div className={s.vendor__header}>
+            <div className="vendor__wrap">
+              <div className="vendor__header-title">
+                <div style={pickarStyle}></div>
+              </div>
+              <div className={s["vendor__header-body"]}>
+                <span className="vendor__header-body__label">
+                  <h1 className={s["vendor__header-label"]}>
+                    Convert currencies in real-time.
+                  </h1>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 }
+
+export default withStyles(s)(Header);

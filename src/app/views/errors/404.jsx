@@ -1,18 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import withStyles from "isomorphic-style-loader/StyleContext";
+import withStyles from "isomorphic-style-loader/withStyles";
 import { Link } from 'react-router-dom';
 
-@connect((state) => ({
-    globalReducer: state.getIn(["globalReducer", "appSettings"])
-}), null)
 
 class NotFound extends React.Component {
-    static propTypes = {
-        globalReducer: PropTypes.shape().isRequired
-    }
-
     constructor(props) {
         super(props);
     }

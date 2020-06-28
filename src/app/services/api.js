@@ -1,20 +1,19 @@
-import { schema, normalize } from "normalizr";
-import { camelizeKeys } from "humps";
-import "isomorphic-fetch";
 import qs from "qs";
-import { appSettings } from "../actions/globalActions";
-
-const API_REQUEST = "https://vsem-edu-oblako.ru/singlemerchant/api/";
+import fetch from "isomorphic-fetch";
+const API_REQUEST = "https://free.currconv.com/api/v7/";
+//const API_REQUEST = "http://apilayer.net/api/live?access_key=fb8e785e7d1a3a6198bb8a4bbb1d9452&currencies=EUR,GBP,CAD,PLN&source=USD&format=1";
 
 const INITIAL_PARAMS = {
-  json: true,
-  merchant_keys: "929990d3b27944af404a5eb3ee1ec4f6",
-  lang: "ru",
-  device_platform: "site",
-  device_id: "010101",
+  "q": "USD_EUR",
+  "compact": "ultra",
+  "apiKey": "185514fd5495296d5129"
 };
 
-function callApi(endpoint, schema) {
+/**
+ * Api Invoker 
+ * @param {*} endpoint 
+ */
+function callApi(endpoint) {
   const fullUrl =
     endpoint.indexOf(API_REQUEST) === -1
       ? API_REQUEST + endpoint + "?" + qs.stringify(INITIAL_PARAMS)
@@ -27,26 +26,24 @@ function callApi(endpoint, schema) {
         return Promise.reject(json);
       }
 
-      const camelizedJson = camelizeKeys(json);
-      
-      console.log(Object.assign({}, normalize(camelizedJson, schema))); 
-
-      return Object.assign({}, normalize(camelizedJson, schema));
+      return Object.assign({}, json);
     })
     .then(
       (response) => ({ response }),
       (error) => ({ error: error.message || "API_REQUEST ERROR" })
     );
 }
+/**
+ * MongoDB extracting in the redux/immutable store 
+ * @param {*} mongo 
+ */
+export const fetchMongoDB = (mongo) =>
+  callApi(mongo)
 
-const details = new schema.Entity("details");
+/**
+ * Invoke api currency request
+ * @param {*} currency 
+ */
+export const fetchCurrency = (currency) =>
+  callApi(currency);
 
-const detailsSchema = new schema.Entity('details', {});
-
-const appSettingsSchema = new schema.Array({
-  details: details,
-  //"code": code,
-});
-
-export const fetchAppSettings = (appSettings) =>
-  callApi(appSettings, appSettingsSchema);

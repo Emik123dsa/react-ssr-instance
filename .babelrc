@@ -16,6 +16,7 @@
        "react-hot-loader/babel", 
        "@babel/plugin-transform-modules-commonjs",
        "@babel/plugin-syntax-dynamic-import",
-       "babel-plugin-styled-components"
+       "babel-plugin-styled-components",
+       "react-loadable/babel"
     ]
 }

@@ -10,7 +10,6 @@ import React from "react";
 import express from "express";
 import { createMemoryHistory } from "history";
 import ReactDOMServer from "react-dom/server";
-
 import { StaticRouter } from "react-router-dom";
 import { parse as parseUrl } from "url";
 import { ReduxAsyncConnect, loadOnServer } from "redux-connect";

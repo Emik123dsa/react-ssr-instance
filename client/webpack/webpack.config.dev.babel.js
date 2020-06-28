@@ -5,13 +5,12 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
 
-
 const plugins = [
   new webpack.NoEmitOnErrorsPlugin(),
   //new webpack.HotModuleReplacementPlugin(),
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.SourceMapDevToolPlugin({
-    filename: "[name].js.map",
+    filename: "main.js.map",
     exclude: ["bundle.js"],
   }),
   new HtmlWebpackPlugin({
@@ -31,6 +30,7 @@ module.exports = require("./webpack.base.babel")({
     main: [
       "babel-polyfill",
       "./client/index.js",
+      "./src/assets/styles/main.scss"
     ],
   },
   output: {

@@ -1,3 +1,3 @@
-import { root } from "./app/sagas";
+import root from "./app/sagas";
 
 export default root;

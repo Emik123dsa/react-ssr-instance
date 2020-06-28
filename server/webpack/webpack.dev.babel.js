@@ -40,6 +40,7 @@ const nodeConf = {
   resolve: {
     alias: {
       "@": path.resolve("src"),
+      'assets': path.resolve("src/assets/styles"),
     },
     modules: ["node_modules"],
     extensions: [".js", ".jsx", ".react.js"],

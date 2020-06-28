@@ -1,0 +1,100 @@
+.vendor {
+  &__converter {
+    &-wrap {
+      background: var(--base-color);
+      width: calc(2 * 100% / 3);
+      transform: translateY(-3rem);
+      border-radius: var(--border-standard-sm);
+      box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.2);
+    }
+    &-body {
+      display: flex;
+      flex-basis: auto;
+      align-items: baseline;
+      flex-wrap: wrap;
+      padding: 28px 40px 36px;
+    }
+    &-item {
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column-reverse;
+      &_changer {
+        padding: 0 16px;
+      }
+      &__button {
+        background: var(--button);
+        color: var(--base-color);
+        border: none;
+        border-radius: var(--border-standard-sm);
+        padding: 11px 30px;
+        font-weight: 500;
+        outline: none;
+        
+        &:disabled {
+          opacity: 0.5;
+        }
+      }
+      label {
+        font-size: 12px;
+        line-height: 14px;
+        color: var(--base-input-name);
+        margin-bottom: 10px;
+        font-weight: 500;
+      }
+      input {
+        outline: none;
+        height: 40px;
+        padding: 0 16px;
+        background: rgba(54, 58, 62, 0.08);
+        border-radius: var(--border-input);
+        border: none;
+        color: var(--base-input-name);
+      }
+
+      &:first-child,
+      &:nth-child(4) {
+        margin-right: 24px;
+      }
+
+      &:nth-child(n + 2) {
+        margin-top: 20px;
+      }
+
+      &:last-child {
+        margin-top: 28px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 766px) {
+  .vendor {
+    &__converter {
+      &-wrap {
+        width: 100%;
+        transform: translateY(-2rem);
+      }
+      &-body {
+        justify-content: flex-end;
+      }
+      &-item {
+        width: 100%;
+        &_changer {
+          position: relative;
+          img {
+            position: absolute;
+            top: 16px;
+          }
+        }
+        &:first-child,
+        &:nth-child(4) {
+          margin-right: 0;
+        }
+
+        &:nth-child(n + 2) {
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+}

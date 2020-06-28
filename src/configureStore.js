@@ -1,42 +1,44 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import { fromJS } from "immutable";
-
-const isDev = process.env.NODE_ENV !== "production";
-
-import thunk from "redux-thunk";
-import createSagaMiddleware, { END } from "redux-saga";
-import { routerMiddleware } from "connected-react-router/immutable";
-import createRootReducer from "./reducers";
+import { createStore, applyMiddleware, compose } from 'redux';
+import { fromJS } from 'immutable';
+import thunk from 'redux-thunk';
+import createSagaMiddleware, { END } from 'redux-saga';
+import { routerMiddleware } from 'connected-react-router/immutable';
+import createRootReducer from './reducers';
 
 export default function configureStore(initialState = {}, history) {
-  const sagaMiddleware = createSagaMiddleware();
+  const sagaMiddleWare = createSagaMiddleware();
+  const middlewares = [
+    thunk,
+    routerMiddleware(history),
+    sagaMiddleWare,
+  ];
 
-  const middlewares = [thunk, routerMiddleware(history), sagaMiddleware];
+  const enhancers = [
+    applyMiddleware(...middlewares),
+  ];
 
-  const enhancers = [applyMiddleware(...middlewares)];
-  
   const composeEnhancers =
-    isDev &&
-    typeof window === "object" &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    process.env.NODE_ENV !== 'production' &&
+      typeof window === 'object' &&
+      window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
       ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-          shouldHotReload: false,
-        })
+        shouldHotReload: false,
+      })
       : compose;
 
   const store = createStore(
     createRootReducer(history),
     fromJS(initialState),
-    composeEnhancers(...enhancers)
+    composeEnhancers(...enhancers),
   );
 
-  store.runSaga = sagaMiddleware.run;
+  store.runSaga = sagaMiddleWare.run;
   store.close = () => store.dispatch(END);
 
   store.injectedReducers = {};
 
   if (module.hot) {
-    module.hot.accept("./reducers", () => {
+    module.hot.accept('./reducers', () => {
       store.replaceReducer(createRootReducer(store.injectedReducers));
     });
   }
