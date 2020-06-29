@@ -22,6 +22,14 @@ export const getAvailableCurrencies = createSelector(getConverterReducer, (vendo
   vendor.get("available_currencies")
 );
 
+export const getLoading = createSelector(getConverterReducer, (vendor) =>
+  vendor.get("loading")
+);
+
+export const getRatio = createSelector(getConverterReducer, (vendor) =>
+  vendor.getIn(["amount", "ratio"])
+);
+
 
 
 

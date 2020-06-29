@@ -53,9 +53,7 @@ class App extends Component {
         {this.renderSiteMeta()}
         <div className="page">
           <Header />
-          <main className="main">{renderRoutes(route.routes)}</main>
-          <Footer />
-          <div id={s.customVendor}></div>
+          {renderRoutes(route.routes)}
         </div>
       </div>
     );

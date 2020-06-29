@@ -1,0 +1,17 @@
+.footer {
+  &-vendor {
+    &__currency {
+      &-init {
+        font-size: 20px;
+        color: var(--base-input-name);
+        line-height: 23px;
+        margin-bottom: 8px;
+      }
+      &-converted {
+        font-size: 40px;
+        font-weight: 800;
+        color: var(--base-input-name);
+      }
+    }
+  }
+}

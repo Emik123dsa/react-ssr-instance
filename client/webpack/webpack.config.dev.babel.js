@@ -30,7 +30,6 @@ module.exports = require("./webpack.base.babel")({
     main: [
       "babel-polyfill",
       "./client/index.js",
-      "./src/assets/styles/main.scss"
     ],
   },
   output: {

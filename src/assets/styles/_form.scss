@@ -49,6 +49,7 @@
         border-radius: var(--border-input);
         border: none;
         color: var(--base-input-name);
+        width: 200px; 
       }
 
       &:first-child,
@@ -93,6 +94,9 @@
 
         &:nth-child(n + 2) {
           margin-top: 20px;
+        }
+        input {
+          width: 100%;
         }
       }
     }

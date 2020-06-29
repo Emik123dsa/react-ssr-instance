@@ -3,60 +3,56 @@ import PropTypes from "prop-types";
 import s from "@/assets/styles/main.scss";
 import Switcher from "@/assets/img/switcher.png";
 import { connect } from "react-redux";
-import Selector from "./global/Selector.jsx";
+import Dropdown from "./global/Dropdown/Dropdown.jsx";
 
 import {
   getAmount,
-  getCurrency,
   getAvailableCurrencies,
+  getLoading,
+  getCurrency,
+  getRatio,
 } from "../selectors/converterSelectors";
+
 const CONVERT = "convert";
 
 import {
   getLoadedCurrencies,
-  setCurrentState,
+  setCurrentAmount,
+  setFromCurrentCurrency,
+  setToCurrentCurrency
 } from "../actions/converterActions";
 
 @connect(
   (state) => ({
     amount: getAmount(state),
-    currency: getCurrency(state),
     available_currencies: getAvailableCurrencies(state),
+    loading: getLoading(state),
+    currency: getCurrency(state),
+    ratio: getRatio(state),
   }),
   {
     getLoadedCurrencies,
-    setCurrentState,
+    setCurrentAmount,
+    setToCurrentCurrency,
+    setFromCurrentCurrency
   }
 )
 class Converter extends React.Component {
   constructor(props) {
     super(props);
-
+    const { currency } = this.props;
     this.state = {
       amount: "",
-      current_currency: "",
-      to_currency: "",
-      loading: false,
+      from_currency: currency.get("from_currency"),
+      to_currency: currency.get("to_currency"),
     };
-
-    this.textInput = React.createRef();
-    this.focusTextInput = this.focusTextInput.bind(this);
   }
-
-  focusTextInput() {
-    console.log(this.textInput);
-  }
-
-  #submitBundle = (e) => {
-    e.preventDefault();
-    this.state.loading = true;
-
-    this.props.getLoadedCurrencies(CONVERT);
-  };
 
   static propTypes = {
     getLoadedCurrencies: PropTypes.func.isRequired,
-    setCurrentState: PropTypes.func.isRequired,
+    setCurrentAmount: PropTypes.func.isRequired,
+    setFromCurrentCurrency: PropTypes.func.isRequired,
+    setToCurrentCurrency: PropTypes.func.isRequired,
     amount: PropTypes.shape({
       initial_amount: PropTypes.number,
       converted_amount: PropTypes.number,
@@ -66,14 +62,36 @@ class Converter extends React.Component {
       to_currency: PropTypes.string,
     }),
     available_currencies: PropTypes.object,
+    loading: PropTypes.bool,
+    ratio: PropTypes.number,
   };
 
-  #changeHandler = (e) => {
-    e.persist();
+  fetchFromSelector = (data) => {
+    const { vendor, type } = data;
 
-    this.props.setCurrentState({
-      [e.target.name]: e.target.value,
+    this.setState({
+      [type]: vendor,
     });
+  };
+
+  submitBundle = (e) => {
+    e.preventDefault();
+
+    this.props.setCurrentAmount({
+      ["amount"]: this.state.amount,
+    });
+    this.props.setFromCurrentCurrency(this.state.from_currency);
+
+    this.props.getLoadedCurrencies(CONVERT, {
+      currency: [this.state.from_currency, this.state.to_currency],
+      amount: this.state.amount,
+    });
+
+    this.props.setToCurrentCurrency(this.state.to_currency);
+  };
+
+  changeHandler = (e) => {
+    e.persist();
 
     this.setState((prev) => ({
       ...prev,
@@ -84,7 +102,13 @@ class Converter extends React.Component {
   };
 
   render() {
-    const { amount, currency } = this.props;
+    const { loading, available_currencies } = this.props;
+
+    let current_currencies = {
+      to_currency: "to_currency",
+      from_currency: "from_currency",
+    };
+
     return (
       <form className={s["vendor__converter-body"]}>
         <div className={s["vendor__converter-item"]}>
@@ -92,49 +116,51 @@ class Converter extends React.Component {
             id="initial_value"
             type="text"
             name="amount"
-            onChange={this.#changeHandler}
+            onChange={this.changeHandler}
             // value={!!this.state.amount ? this.state.amount.replace(0, "") : 0}
           />
           <label htmlFor="initial_value">Amount</label>
         </div>
         <div className={s["vendor__converter-item"]}>
-          <input
-            id="current_currency"
-            type="text"
-            name="current_currency"
-            onChange={this.#changeHandler}
-            ref={this.textInput}
+          <Dropdown
+            currency={this.state.from_currency}
+            exception={this.state.to_currency}
+            type={current_currencies.from_currency}
+            fetchFromSelector={this.fetchFromSelector.bind(this)}
+            items={available_currencies}
           />
-          <Selector items={this.props.available_currencies} />
           <label htmlFor="from_value">From</label>
         </div>
         <div className={s["vendor__converter-item_changer"]}>
           <img src={Switcher} alt={Switcher.toUpperCase()} />
         </div>
         <div className={s["vendor__converter-item"]}>
-          <input
-            id="to_value"
-            type="text"
-            name="to_currency"
-            onChange={this.#changeHandler}
+          <Dropdown
+            currency={this.state.to_currency}
+            exception={this.state.from_currency}
+            fetchFromSelector={this.fetchFromSelector.bind(this)}
+            type={current_currencies.to_currency}
+            items={available_currencies}
           />
           <label htmlFor="to_value">To</label>
         </div>
         <div className={s["vendor__converter-item"]}>
-          {!this.state.loading && (
+          {!loading && (
             <button
               className={s["vendor__converter-item__button"]}
-              onClick={this.#submitBundle}
+              onClick={this.submitBundle}
               type="submit"
-              disabled={this.state.loading}
-            >Convert</button>
+              disabled={loading}
+            >
+              Convert
+            </button>
           )}
-          {this.state.loading && (
+          {loading && (
             <button
               className={s["vendor__converter-item__button"]}
-              onClick={this.#submitBundle}
+              onClick={this.submitBundle}
               type="submit"
-              disabled={this.state.loading}
+              disabled={loading}
             >
               Loading
             </button>
