@@ -1,5 +1,5 @@
 {
-  "name": "simple converter for currencies (Pickar task)",
+  "name": "Pickartask",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "dev": "yarn run clean && cross-env NODE_ENV=development webpack -w --config server/webpack/webpack.dev.babel.js",
     "build": "yarn run clean && cross-env NODE_ENV=production webpack --mode=production --config server/webpack/webpack.prod.babel.js",
     "start": "nodemon ./build/server.js",
-    "test": "jest"
+    "jest": "jest"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.10.1",
