@@ -28,6 +28,8 @@ export const FETCH_AMOUNT = CONVERTER_REDUCER.SET_AMOUNT;
 export const FETCH_TO_CURRENCY_TYPE = CONVERTER_REDUCER.SET_TO_CURRENCY_TYPE;
 export const FETCH_FROM_CURRENCY_TYPE = CONVERTER_REDUCER.SET_FROM_CURRENCY_TYPE;
 
+export const FETCH_HISTORY_STORE = CONVERTER_REDUCER.SET_HISTORY_STORE;
+
 export const FETCH_MONGO_DATABASE = CONVERTER_REDUCER.SET_MONGO_DATABASE_STORE;
 export const FETCH_LOADING = CONVERTER_REDUCER.SET_LOADING;
 
@@ -48,6 +50,7 @@ export const fetchConvertedCurrency = (currency) => action(FETCH_CURRENCY_CONVER
 export const fetchCurrencyRatio = (ratio) => action(FETCH_CURRENCY_RATIO, { ratio });
 export const fetchToCurrency = (payload) => action(FETCH_TO_CURRENCY_TYPE, { payload });
 export const fetchFromCurrency = (payload) => action(FETCH_FROM_CURRENCY_TYPE, { payload })
+export const fetchHistoryStore = (payload) => action(FETCH_HISTORY_STORE, { payload });
 const fetchAmount = (value) => action(FETCH_AMOUNT, { value });
 const loading = (payload) => action(FETCH_LOADING, { payload });
 
@@ -85,14 +88,70 @@ export function getLoadedCurrencies(schema, params = {}) {
 
       if (amount) {
         dispatch(fetchConvertedCurrency(amount * Number(response && response[fetchCurrency])));
+
+        var date = new Date();
+
+        const payload = {
+          id: `${returnCorrectDate(date.getMonth())} ${date.getDate()}, ${date.getFullYear()}`,
+          from_currency: `${amount} ${currency.reduce((acc, item) => acc)}`,
+          to_currency: `${(amount * Number(response && response[fetchCurrency])).toFixed(5)} ${currency.reduce((acc, item) => item)}`
+        }
+
+        dispatch(fetchHistoryStore(payload));
       }
 
       dispatch(loading(false));
 
     } catch (e) {
-      return new Promise.reject(e);
+      console.error(e)
     }
   }
+}
+
+function returnCorrectDate(date) {
+  let currentMonth = "";
+
+  switch (date) {
+    case 0:
+      currentMonth = "January";
+      break;
+    case 1:
+      currentMonth = "February";
+      break;
+    case 2:
+      currentMonth = "March";
+      break;
+    case 3:
+      currentMonth = "April";
+      break;
+    case 4:
+      currentMonth = "May";
+      break;
+    case 5:
+      currentMonth = "June";
+      break;
+    case 6:
+      currentMonth = "July";
+      break;
+    case 7:
+      currentMonth = "August";
+      break;
+    case 8:
+      currentMonth = "September";
+      break;
+    case 9:
+      currentMonth = "October";
+      break;
+    case 10:
+      currentMonth = "November";
+      break;
+    case 11:
+      currentMonth = "December";
+      break;
+    default: break;
+
+  }
+  return currentMonth;
 }
 /**
  * Current amount from the input is mutating to the Redux Store

@@ -1,11 +1,10 @@
 import { CONVERTER_REDUCER } from "../../actions/vendor/converterFilter";
-import { fromJS } from "immutable";
+import { fromJS, merge } from "immutable";
 
 const converterReducers = fromJS({
   vendor_DATABASE: [],
-  temporaryStore: [],
+  transactions: [],
   available_currencies: ["EUR", "USD", "CHF"],
-
   currency: {
     from_currency: "EUR",
     to_currency: "USD"
@@ -20,6 +19,8 @@ const converterReducers = fromJS({
 
 const essentialReducers = (state = converterReducers, action) => {
   switch (action.type) {
+    case CONVERTER_REDUCER.SET_HISTORY_STORE:
+      return state.update("transactions", store => store.concat(action?.payload));
     case CONVERTER_REDUCER.SET_MONGO_DATABASE_STORE:
       return state.setIn(["vendor_DATABASE"], fromJS(action?.payload));
     case CONVERTER_REDUCER.SET_CURRENCY_RATIO:

@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = require("./webpack.base.babel")({
   entry: [path.join(process.cwd(), "client/index.js")],
-
   output: {
     filename: "[name].js",
     chunkFilename: "[name].chunk.js",
@@ -13,14 +12,14 @@ module.exports = require("./webpack.base.babel")({
   plugins: [
     new UglifyJsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "vendor",
-      children: true,
-      minChunks: 2,
-      async: true,
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: "vendor",
+    //   children: true,
+    //   minChunks: 2,
+    //   async: true,
+    // }),
     new HtmlWebpackPlugin({
-      template: "app/static/index.html",
+      template: "static/index.html",
       filename: "main.html",
       minify: {
         removeComments: true,

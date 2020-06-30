@@ -12,6 +12,7 @@ const pickarStyle = {
   position: "relative",
   display: "block",
   width: "100%",
+  zIndex: "22",
   height: "35px",
   backgroundRepeat: "no-repeat",
 };
@@ -31,13 +32,6 @@ class Header extends React.Component {
             <div className="vendor__wrap">
               <div className="vendor__header-title">
                 <div style={pickarStyle}></div>
-              </div>
-              <div className={s["vendor__header-body"]}>
-                <span className="vendor__header-body__label">
-                  <h1 className={s["vendor__header-label"]}>
-                    Convert currencies in real-time.
-                  </h1>
-                </span>
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ import s from "@/assets/styles/main.scss";
 import Switcher from "@/assets/img/switcher.png";
 import { connect } from "react-redux";
 import Dropdown from "./global/Dropdown/Dropdown.jsx";
+import InputMask from "react-input-mask";
 
 import {
   getAmount,
@@ -19,7 +20,7 @@ import {
   getLoadedCurrencies,
   setCurrentAmount,
   setFromCurrentCurrency,
-  setToCurrentCurrency
+  setToCurrentCurrency,
 } from "../actions/converterActions";
 
 @connect(
@@ -34,7 +35,7 @@ import {
     getLoadedCurrencies,
     setCurrentAmount,
     setToCurrentCurrency,
-    setFromCurrentCurrency
+    setFromCurrentCurrency,
   }
 )
 class Converter extends React.Component {
@@ -46,6 +47,8 @@ class Converter extends React.Component {
       from_currency: currency.get("from_currency"),
       to_currency: currency.get("to_currency"),
     };
+
+    this.switcherRef = React.createRef();
   }
 
   static propTypes = {
@@ -69,8 +72,33 @@ class Converter extends React.Component {
   fetchFromSelector = (data) => {
     const { vendor, type } = data;
 
+    const { from_currency, to_currency } = this.state;
+
+    if (vendor === from_currency || vendor === to_currency) {
+      this.setState({
+        from_currency: to_currency,
+        to_currency: from_currency,
+      });
+      return;
+    }
+
     this.setState({
       [type]: vendor,
+    });
+  };
+
+  convertCurrencies = () => {
+    const { from_currency, to_currency } = this.state;
+
+    if (this.switcherRef.current.style.transform === "rotate(180deg)") {
+      this.switcherRef.current.style = "transform: rotate(-180deg)";
+    } else {
+      this.switcherRef.current.style = "transform: rotate(180deg);";
+    }
+
+    this.setState({
+      from_currency: to_currency,
+      to_currency: from_currency,
     });
   };
 
@@ -80,6 +108,7 @@ class Converter extends React.Component {
     this.props.setCurrentAmount({
       ["amount"]: this.state.amount,
     });
+
     this.props.setFromCurrentCurrency(this.state.from_currency);
 
     this.props.getLoadedCurrencies(CONVERT, {
@@ -96,7 +125,7 @@ class Converter extends React.Component {
     this.setState((prev) => ({
       ...prev,
       ...{
-        [e.target.name]: e.target.value,
+        [e.target.name]: e.target.value.replace(/[^.\d]/g, ""),
       },
     }));
   };
@@ -112,13 +141,16 @@ class Converter extends React.Component {
     return (
       <form className={s["vendor__converter-body"]}>
         <div className={s["vendor__converter-item"]}>
-          <input
+          <InputMask
             id="initial_value"
             type="text"
+            mask="99999"
+            maskChar=""
             name="amount"
             onChange={this.changeHandler}
-            // value={!!this.state.amount ? this.state.amount.replace(0, "") : 0}
+            value={!!this.state.amount ? this.state.amount : 0}
           />
+
           <label htmlFor="initial_value">Amount</label>
         </div>
         <div className={s["vendor__converter-item"]}>
@@ -131,8 +163,17 @@ class Converter extends React.Component {
           />
           <label htmlFor="from_value">From</label>
         </div>
-        <div className={s["vendor__converter-item_changer"]}>
-          <img src={Switcher} alt={Switcher.toUpperCase()} />
+        <div
+          onClick={() => {
+            this.convertCurrencies();
+          }}
+          className={s["vendor__converter-item_changer"]}
+        >
+          <img
+            ref={this.switcherRef}
+            src={Switcher}
+            alt={Switcher.toUpperCase()}
+          />
         </div>
         <div className={s["vendor__converter-item"]}>
           <Dropdown

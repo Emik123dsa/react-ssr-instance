@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { Seq } from "immutable";
 import s from "./Dropdown.scss";
 import withStyles from "isomorphic-style-loader/withStyles";
-import useComponentVisible from "../../../hooks/useComponentVisible";
+import OutsideClickHandler from "react-outside-click-handler";
+import Path from "@/assets/img/Path.png";
 
 class Dropdown extends React.Component {
   constructor(props) {
@@ -34,28 +35,46 @@ class Dropdown extends React.Component {
   render() {
     const { items, currency, type, exception } = this.props;
 
-    const { ref, isComponentVisible } = useComponentVisible(true);
-
-    const optionsCurrency = Seq(items).map(
-      (vendor) =>
-        vendor !== exception && (
-          <li
-            className={s["selector__enabled"]}
-            onClick={() => {
-              this.setCurrentCurrency(vendor, type);
-            }}
-            key={vendor.toLowerCase()}
-          >
-            {vendor}
-          </li>
-        )
+    const optionsCurrency = Seq(items).map((vendor) =>
+      vendor !== currency ? (
+        <li
+          className={s["selector__enabled"]}
+          onClick={() => {
+            this.setCurrentCurrency(vendor, type);
+          }}
+          key={vendor.toLowerCase()}
+        >
+          {vendor}
+        </li>
+      ) : (
+        <li
+          className={s["selector__active"]}
+          key={vendor.toLowerCase()}
+        >
+          {vendor}
+        </li>
+      )
     );
     return (
-      <div ref={ref} className="selector__currency">
-        {isComponentVisible ? "123" : "no"}
-        <div onClick={this.openCurrentCurrency} className={s["selector-curr"]}>
-          {currency}
-        </div>
+      <div className="selector__currency">
+        <OutsideClickHandler
+          onOutsideClick={() => {
+            this.closeCurrentCurrency();
+          }}
+        >
+          <div
+            onClick={this.openCurrentCurrency}
+            className={s["selector-curr"]}
+          >
+            {currency}
+          <img 
+          style={{
+            transform: this.state.open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "0.3s ease"
+          }}
+          src={Path} alt={Path.toLowerCase()}/>
+          </div>
+        </OutsideClickHandler>
         <div
           style={{
             display: !this.state.open ? "none" : "block",

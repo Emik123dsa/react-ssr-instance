@@ -1,7 +1,33 @@
 .footer {
   &-vendor {
     &__wrap {
-        padding-left: 50px;
+      margin-top: 64px;
+      padding-left: 50px;
+      padding-bottom: 80px;
+    }
+  }
+}
+
+@media screen and (max-width: 976px) {
+  .footer {
+    &-vendor {
+      &__wrap {
+        margin-top: 22px;
+        padding-left: 20px;
+        padding-bottom: 80px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 766px) {
+  .footer {
+    &-vendor {
+      &__wrap {
+        margin-top: 22px;
+        padding-left: 20px;
+        padding-bottom: 80px;
+      }
     }
   }
 }

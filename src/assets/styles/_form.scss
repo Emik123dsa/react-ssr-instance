@@ -1,9 +1,44 @@
 .vendor {
+  &__header {
+    padding-top: 40px;
+    &-body {
+      padding-top: 124px;
+    }
+    &-label {
+      color: var(--base-color);
+      position: relative;
+      display: block;
+      z-index: 2;
+      width: 80%;
+      letter-spacing: 2px;
+      font-size: 40px;
+      line-height: 47px;
+    }
+  }
   &__converter {
+    position: relative;
+    &::before {
+      bottom: 60px;
+      left: 0;
+      background: var(--background);
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    &-link {
+      margin-top: 28px;
+      margin-bottom: 26px;
+      &_title {
+        text-decoration: none;
+        font-size: 12px;
+        color: var(--base-input-name);
+      }
+    }
     &-wrap {
       background: var(--base-color);
-      width: calc(2 * 100% / 3);
-      transform: translateY(-3rem);
+      position: relative;
+      z-index: 99;
       border-radius: var(--border-standard-sm);
       box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.2);
     }
@@ -20,6 +55,10 @@
       flex-direction: column-reverse;
       &_changer {
         padding: 0 16px;
+        img {
+          transition: 0.3s ease;
+        }
+        cursor: pointer;
       }
       &__button {
         background: var(--button);
@@ -29,7 +68,7 @@
         padding: 11px 30px;
         font-weight: 500;
         outline: none;
-        
+
         &:disabled {
           opacity: 0.5;
         }
@@ -49,31 +88,46 @@
         border-radius: var(--border-input);
         border: none;
         color: var(--base-input-name);
-        width: 200px; 
+        width: 200px;
       }
 
       &:first-child,
       &:nth-child(4) {
         margin-right: 24px;
       }
-
-      &:nth-child(n + 2) {
-        margin-top: 20px;
-      }
-
-      &:last-child {
-        margin-top: 28px;
-      }
     }
   }
 }
 
-@media screen and (max-width: 766px) {
+@media screen and (max-width: 1230px) {
   .vendor {
+    &__header {
+      &-body {
+        padding-top: 65px;
+      }
+      &-label {
+        color: var(--base-color);
+        position: relative;
+        display: block;
+        z-index: 2;
+        letter-spacing: 2px;
+        font-size: 40px;
+        line-height: 47px;
+      }
+    }
     &__converter {
+      &::before {
+        top: -5px;
+        left: 0;
+        background: var(--background);
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 50%;
+      }
       &-wrap {
         width: 100%;
-        transform: translateY(-2rem);
+        //transform: translateY(-2rem);
       }
       &-body {
         justify-content: flex-end;

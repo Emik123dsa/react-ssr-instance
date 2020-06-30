@@ -1,8 +1,8 @@
 const path = require("path");
 
 const alias = {
-  components: path.resolve("./src/app/components"),
-  containers: path.resolve("./src/app/views"),
+  "@": path.resolve("src"),
+  'assets': path.resolve("src/assets/styles"),
 };
 
 module.exports = alias;

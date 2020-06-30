@@ -3,12 +3,13 @@
 @import "./order.scss";
 @import "./form.scss";
 @import "../../../node_modules/normalize.scss/normalize.scss";
-
+@import "./order.scss";
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
+
 
 .container {
   padding: 0 60px;
@@ -16,6 +17,13 @@
   margin: 0 auto;
 }
 
+.sub_container {
+  padding-top: 90px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
 #customVendor {
   z-index: -1;
   background: #eef4f7;
@@ -30,7 +38,7 @@ li,
 ul,
 nav {
   margin: 0;
-  list-style:none;
+  list-style: none;
   padding: 0;
 }
 h1,
@@ -53,5 +61,12 @@ body {
     padding: 0 20px;
     width: 100%;
     margin: 0 auto;
+  }
+
+  .sub_container {
+    padding-top: 65px;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
   }
 }

@@ -2,6 +2,9 @@
   &-curr {
     width: 200px;
     height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 0 16px;
     cursor: pointer;
     color: var(--base-input-name);
@@ -11,15 +14,19 @@
     font-size: 16px;
     line-height: 40px;
   }
-  &__enabled {
+  &__active {
     position: relative;
-    padding: 10px 0;
-
-    cursor: pointer;
-    transition: 0.3s ease;
-    color: var(--base-input-name);
-    &:nth-child(n + 2) {
-       border-top: 1px solid rgba(54, 58, 62, 0.08);
+    cursor: not-allowed !important;
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: -1px;
+      left: -16px;
+      width: calc(100% + 32px);
+      height: calc(100% + 1px);
+      transition: 0.3s ease;
+      background: rgba(54, 58, 62, 0.08);
     }
 
     &::before {
@@ -30,12 +37,10 @@
       left: -16px;
       width: 0;
       height: calc(100% + 1px);
-      transition: 0.3s ease;
     }
     &:hover::before {
-      width: calc(100% + 32px);
-      transition: 0.3s ease;
-      background: rgba(54, 58, 62, 0.08);
+      width: 0 !important;
+      background: transparent;
     }
   }
   &-list {
@@ -46,15 +51,42 @@
     width: 100%;
     padding: 0 16px;
     border-radius: var(--border-input);
-    background: #fff;
+    background: #ffffff;
     box-shadow: 0 0 12px rgba(54, 58, 62, 0.2);
+
+    li {
+      position: relative;
+      padding: 10px 0;
+      cursor: pointer;
+      transition: 0.3s ease;
+      color: var(--base-input-name);
+      &:nth-child(n + 2) {
+        border-top: 1px solid rgba(54, 58, 62, 0.08);
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: -1px;
+        left: -16px;
+        width: 0;
+        height: calc(100% + 1px);
+        transition: 0.3s ease;
+      }
+      &:hover::before {
+        width: calc(100% + 32px);
+        transition: 0.3s ease;
+        background: rgba(54, 58, 62, 0.08);
+      }
+    }
   }
   &-env {
     position: relative;
   }
 }
 
-@media screen and (max-width: 766px) {
+@media screen and (max-width: 1230px) {
   .selector {
     &-curr {
       width: 100%;

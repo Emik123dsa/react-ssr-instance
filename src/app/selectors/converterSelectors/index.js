@@ -14,10 +14,6 @@ export const getCurrency = createSelector(getConverterReducer, (vendor) =>
   vendor.get("currency")
 );
 
-export const getTemporaryStore = createSelector(getConverterReducer, (vendor) =>
-  vendor.get("temporaryStore")
-);
-
 export const getAvailableCurrencies = createSelector(getConverterReducer, (vendor) =>
   vendor.get("available_currencies")
 );
@@ -30,6 +26,9 @@ export const getRatio = createSelector(getConverterReducer, (vendor) =>
   vendor.getIn(["amount", "ratio"])
 );
 
+export const getTransactions = createSelector(getConverterReducer, (vendor) =>
+  vendor.get("transactions")
+);
 
 
 

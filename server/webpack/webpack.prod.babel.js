@@ -8,7 +8,7 @@ const rules = require("./rules");
 
 const nodeConf = {
   target: "node",
-  entry: "./server.js",
+  entry: "./server",
   externals: [nodeExternals(), "react-helmet"],
   output: {
     path: path.resolve("build"),
@@ -23,12 +23,12 @@ const nodeConf = {
   plugins: [
     new UglifyJsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "vendor",
-      children: true,
-      minChunks: 2,
-      async: true,
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: "vendor",
+    //   children: true,
+    //   minChunks: 2,
+    //   async: true,
+    // }),
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
@@ -50,6 +50,6 @@ const nodeConf = {
   },
 };
 
-const browserConf = require("../client/webpack.prod.babel");
+const browserConf = require("./../../client/webpack/webpack.config.prod.babel");
 
 module.exports = [browserConf, nodeConf];
