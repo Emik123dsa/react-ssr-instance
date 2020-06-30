@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+const TerserPlugin = require('terser-webpack-plugin');
 module.exports = require("./webpack.base.babel")({
   entry: [path.join(process.cwd(), "client/index.js")],
   output: {
@@ -10,7 +10,7 @@ module.exports = require("./webpack.base.babel")({
     chunkFilename: "[name].chunk.js",
   },
   plugins: [
-    new UglifyJsPlugin(),
+    new TerserPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
     // new webpack.optimize.CommonsChunkPlugin({
     //   name: "vendor",

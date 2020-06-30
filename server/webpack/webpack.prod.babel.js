@@ -1,7 +1,7 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const webpack = require("webpack");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 
 const alias = require("../../helpers/alias");
 const rules = require("./rules");
@@ -21,7 +21,7 @@ const nodeConf = {
     rules,
   },
   plugins: [
-    new UglifyJsPlugin(),
+    new TerserPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
     // new webpack.optimize.CommonsChunkPlugin({
     //   name: "vendor",

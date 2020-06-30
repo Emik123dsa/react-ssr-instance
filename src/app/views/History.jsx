@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import s from "@/assets/styles/main.scss";
 
-import Loadable from "react-loadable";
 import { Link } from "react-router-dom";
 import Orders from "../components/Orders.jsx";
 

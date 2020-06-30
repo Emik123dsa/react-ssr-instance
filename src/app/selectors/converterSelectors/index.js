@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 export const getConverterReducer = (state) => state.get("converterReducer");
 
 export const getMongoDB = createSelector(getConverterReducer, (vendor) =>
-  vendor.get("vendor_DATABASE")
+  vendor.get("vendor")
 );
 
 export const getAmount = createSelector(getConverterReducer, (vendor) =>

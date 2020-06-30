@@ -2,7 +2,7 @@ import { CONVERTER_REDUCER } from "../../actions/vendor/converterFilter";
 import { fromJS, merge } from "immutable";
 
 const converterReducers = fromJS({
-  vendor_DATABASE: [],
+  vendor: [],
   transactions: [],
   available_currencies: ["EUR", "USD", "CHF"],
   currency: {
@@ -19,6 +19,8 @@ const converterReducers = fromJS({
 
 const essentialReducers = (state = converterReducers, action) => {
   switch (action.type) {
+    case CONVERTER_REDUCER.SET_MONGO_THUNK:
+      return state.setIn(["vendor"], fromJS(action?.uuid));
     case CONVERTER_REDUCER.SET_HISTORY_STORE:
       return state.update("transactions", store => store.concat(action?.payload));
     case CONVERTER_REDUCER.SET_MONGO_DATABASE_STORE:

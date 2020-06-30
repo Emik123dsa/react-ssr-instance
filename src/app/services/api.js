@@ -16,7 +16,7 @@ function callApi(endpoint, params = {}) {
   const fullUrl =
     endpoint.indexOf(API_REQUEST) === -1
       ? API_REQUEST + endpoint + "?" + qs.stringify(INITIAL_PARAMS) + "&" + qs.stringify(params)
-      : endpoint + "?" + qs.stringify(INITIAL_PARAMS) + "&" + qs.stringify(params);
+      : endpoint + "?" + "&" + qs.stringify(params);
 
   return fetch(fullUrl)
     .then((response) => response.json().then((json) => ({ json, response })))
@@ -45,4 +45,3 @@ export const fetchMongoDB = (mongo, params) =>
  */
 export const fetchCurrency = (currency, params) =>
   callApi(currency, params);
-

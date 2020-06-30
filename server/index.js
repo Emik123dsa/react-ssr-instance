@@ -30,6 +30,7 @@ app.use("/", express.static(path.resolve("build")));
 const initialState = {};
 
 app.get("*", (req, res) => {
+
   const url = req.originalUrl || req.url;
 
   const history = createMemoryHistory({
@@ -108,6 +109,7 @@ app.get("*", (req, res) => {
               store.getState()
             )};</script>`
           );
+
           return res.send(data);
         });
       });

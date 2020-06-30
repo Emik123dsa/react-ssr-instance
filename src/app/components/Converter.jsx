@@ -5,6 +5,9 @@ import Switcher from "@/assets/img/switcher.png";
 import { connect } from "react-redux";
 import Dropdown from "./global/Dropdown/Dropdown.jsx";
 import InputMask from "react-input-mask";
+import { withCookies, Cookies } from "react-cookie";
+
+import { v4 as uuidv4 } from "uuid";
 
 import {
   getAmount,
@@ -104,6 +107,9 @@ class Converter extends React.Component {
 
   submitBundle = (e) => {
     e.preventDefault();
+    const { cookies } = this.props;
+
+    const uuid = uuidv4();
 
     this.props.setCurrentAmount({
       ["amount"]: this.state.amount,
@@ -111,9 +117,17 @@ class Converter extends React.Component {
 
     this.props.setFromCurrentCurrency(this.state.from_currency);
 
+    if (!cookies.get("uuid")) {
+      cookies.set("uuid", uuid, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 30 * 12,
+      });
+    }
+
     this.props.getLoadedCurrencies(CONVERT, {
       currency: [this.state.from_currency, this.state.to_currency],
       amount: this.state.amount,
+      cookie: !!cookies.get("uuid") ? cookies.get("uuid") : uuid,
     });
 
     this.props.setToCurrentCurrency(this.state.to_currency);
@@ -212,4 +226,4 @@ class Converter extends React.Component {
   }
 }
 
-export default Converter;
+export default withCookies(Converter);

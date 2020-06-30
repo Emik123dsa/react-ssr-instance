@@ -1,7 +1,9 @@
 import { put, call, all, fork, take, takeEvery, select } from "redux-saga/effects";
 
 import api from "../services";
-
+/**
+ * SAGA IS REQUIRED MAINTENANCE
+ */
 import * as actions from "../actions/converterActions";
 import * as selectors from "../selectors/converterSelectors";
 

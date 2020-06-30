@@ -3,29 +3,64 @@ import PropTypes, { object } from "prop-types";
 import s from "@/assets/styles/main.scss";
 import { Seq } from "immutable";
 import { connect } from "react-redux";
+import { withCookies, Cookies } from "react-cookie";
+import { setMongoDbThunk } from "../actions/converterActions";
 
-import { getTransactions } from "../selectors/converterSelectors";
+import { getTransactions, getMongoDB } from "../selectors/converterSelectors";
 
-@connect((state) => ({
-  transactions: getTransactions(state),
-}))
+@connect(
+  (state) => ({
+    transactions: getTransactions(state),
+    vendor: getMongoDB(state),
+  }),
+  {
+    setMongoDbThunk,
+  }
+)
 class Orders extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      loading: false,
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      loading: true,
+    });
+
+    const uuid = this.props.cookies.get("uuid");
+
+    if (!!uuid) {
+      this.props.setMongoDbThunk(uuid);
+    }
+
+    this.setState({
+      loading: false,
+    });
   }
 
   static propTypes = {
     transactions: PropTypes.object.isRequired,
+    vendor: PropTypes.object.isRequired,
   };
   render() {
-    const { transactions } = this.props;
+    const { vendor } = this.props;
 
-    if (!transactions.toJS().length) {
-      return (
-        <div className={s["history__body-table_active"]}>
-          There's not any stored transactions.
-        </div>
-      );
+    if (!vendor.toJS().length) {
+      if (this.state.loading) {
+        return (
+          <div className={s["history__body-table_active"]}>
+            There's not any stored transactions.
+          </div>
+        );
+      } else {
+        return (
+          <div className={s["history__body-table_active"]}>Loading ...</div>
+        );
+      }
     }
 
     return (
@@ -38,24 +73,27 @@ class Orders extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {Seq(transactions)
-            .reverse()
-            .map((item, key) => (
-              <tr
+          {!this.state.loading &&
+            Seq(vendor)
+              .reverse()
+              .map((item, key) => (
+                <tr 
                 style={{
-                  transform: `translateY(${key * 20}px)`,
+                    transform: `translateY(${key * 20}px)`
                 }}
-                key={key}
-              >
-                <td>{item.id}</td>
-                <td>{item.from_currency}</td>
-                <td>{item.to_currency}</td>
-              </tr>
-            ))}
+                key={key}>
+                  <td>{item.get("id")}</td>
+                  <td>{item.get("from_currency")}</td>
+                  <td>{item.get("to_currency")}</td> 
+                </tr>
+              ))}
+              <tr style={{
+                  height: `${vendor.toJS().length * 20}px`
+              }}></tr>
         </tbody>
       </table>
     );
   }
 }
 
-export default Orders;
+export default withCookies(Orders);
