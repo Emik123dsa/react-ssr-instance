@@ -14,7 +14,7 @@ import { StaticRouter } from "react-router-dom";
 import { parse as parseUrl } from "url";
 import { ReduxAsyncConnect, loadOnServer } from "redux-connect";
 import StyleContext from "isomorphic-style-loader/StyleContext";
-
+import cookieParser from "cookie-parser";
 import configureStore from "../src/configureStore";
 import routes from "../src/app/routes/routes";
 import { StaticRoutesConfig } from "../src/app/routes/staticRoutes";
@@ -24,14 +24,15 @@ import sagas from "../src/sagas";
 const PORT = process.env.NODE_PORT || 3000;
 
 const app = express();
-
+app.use(cookieParser());
 app.use("/", express.static(path.resolve("build")));
 
 const initialState = {};
 
 app.get("*", (req, res) => {
-
   const url = req.originalUrl || req.url;
+
+  const cookies = [req.cookies["uuid"]];
 
   const history = createMemoryHistory({
     initialEntries: [url],
@@ -41,7 +42,8 @@ app.get("*", (req, res) => {
 
   const location = parseUrl(url);
 
-  const helpers = {};
+  const helpers = [...cookies];
+
   const indexFile = path.resolve("build/main.html");
   store
     .runSaga(sagas)

@@ -36,6 +36,7 @@ class App extends Component {
             rel: "canonical",
           },
         ]}
+        title={"Pickar Converter Task"}
         meta={[
           {
             name: "viewport",

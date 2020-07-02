@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 
 export const getConverterReducer = (state) => state.get("converterReducer");
 
-export const getMongoDB = createSelector(getConverterReducer, (vendor) =>
+export const getVendorOrders = createSelector(getConverterReducer, (vendor) =>
   vendor.get("vendor")
 );
 

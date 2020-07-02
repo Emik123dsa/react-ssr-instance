@@ -1,13 +1,41 @@
 import React from "react";
 import PropTypes from "prop-types";
 import s from "@/assets/styles/main.scss";
-
+import { withCookies, Cookies } from "react-cookie";
+import { setMongoDbThunk } from "../actions/converterActions";
 import { Link } from "react-router-dom";
 import Orders from "../components/Orders.jsx";
+import { connect } from "react-redux";
 
+@connect(null,
+  {
+    setMongoDbThunk
+  }
+)
 class History extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      loading: true
+    }
+
+  }
+
+  componentDidMount() {
+    this.setState({
+      loading: true,
+    });
+
+    const uuid = this.props.cookies.get("uuid");
+
+    if (!!uuid) {
+      this.props.setMongoDbThunk(uuid);
+    }
+
+    this.setState({
+      loading: false,
+    });
   }
 
   render() {
@@ -23,7 +51,7 @@ class History extends React.Component {
               </div>
               <div className={s["history__body"]}>
                 <div className={s["history__body-table"]}>
-                  <Orders />
+                  <Orders loading={this.state.loading} />
                 </div>
               </div>
             </div>
@@ -34,4 +62,4 @@ class History extends React.Component {
   }
 }
 
-export default History;
+export default withCookies(History);
