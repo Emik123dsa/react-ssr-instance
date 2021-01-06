@@ -24,7 +24,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.10.1",
     "animated-number-react": "^0.1.1",
     "autoprefixer": "^9.8.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.0.1",
     "babel-plugin-styled-components": "^1.10.7",
